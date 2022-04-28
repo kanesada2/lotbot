@@ -18,8 +18,8 @@ return new class extends Migration
             $table->enum('type', ['bot', 'target'])->index()->comment('アカウントの種別');
             $table->string('twitter_id')->unique()->comment('twitterのアカウントID');
             $table->string('screen_name')->comment('twitterの表示名');
-            $table->string('access_token')->comment('twitterのアクセストークン');
-            $table->string('access_secret')->comment('twitterのアクセストークンシークレット');
+            $table->string('access_token')->nullable()->comment('twitterのアクセストークン');
+            $table->string('access_secret')->nullable()->comment('twitterのアクセストークンシークレット');
             $table->timestamps();
         });
     }
