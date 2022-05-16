@@ -9,8 +9,12 @@ class Parameter extends Model
 {
     use HasFactory;
 
-    const KEY_TWITTER_CONSUMER_KEY = 'consumer_key';
-    const KEY_TWITTER_CONSUMER_SECRET = 'consumer_secret';
+    const KEY_CONSUMER_KEY = 'consumer_key';
+    const KEY_CONSUMER_SECRET = 'consumer_secret';
+    const KEY_CALL_BACK_URL = 'call_back_url';
+    const KEY_RETWEET_RATE = 'retweet_rate';
+    const KEY_LIKE_RAKE = 'like_rate';
+    const KEY_EXPLORE_FROM = 'explore_from';
 
     /**
      * keyによって一件取得する
@@ -18,29 +22,40 @@ class Parameter extends Model
      * @param string $key
      * @return static
      */
-    public static function findByKey(string $key): static
+    protected static function findByKey(string $key): static
     {
         return static::where('key', $key)->first();
     }
 
     /**
+     * keyに対応するvalueを返す
+     * 
+     * @param string $key
+     */
+    protected static function extractValueByKey(string $key)
+    {
+        $model = static::findByKey($key);
+        return $model->value;
+    }
+
+    /**
      * twitter用のconsumerKeyを取得する
      * 
-     * @return static
+     * @return string
      */
-    public static function findConsumerKey(): static
+    public static function consumerKey(): string
     {
-        return static::findByKey(static::KEY_TWITTER_CONSUMER_KEY);
+        return static::extractValueByKey(static::KEY_CONSUMER_KEY);
     }
 
     /**
      * twitter用のconsumerSecretを取得する
      * 
-     * @return static
+     * @return string
      */
-    public static function findConsumerSecret(): static
+    public static function consumerSecret(): string
     {
-        return static::findByKey(static::KEY_TWITTER_CONSUMER_SECRET);
+        return static::extractValueByKey(static::KEY_CONSUMER_SECRET);
     } 
 
 }
