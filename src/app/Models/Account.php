@@ -13,8 +13,8 @@ class Account extends Model
 
     protected $guarded = ['id'];
 
-    public static function findByTwitterId(string $twitterId): ?static
+    public static function findBotByTwitterId(string $twitterId): ?static
     {
-        return static::where('twitter_id', $twitterId)->first();
+        return static::where('twitter_id', $twitterId)->where('type', static::ACCOUNT_TYPE_BOT)->first();
     }
 }

@@ -32,7 +32,7 @@ class AuthController extends Controller {
         $twitter = new TwitterAPI();
         $twitter->initConnection($oauthToken, $oauthSecret);
         $result = $twitter->getAccessToken($request->oauth_verifier);
-        $exist = Account::findByTwitterId($result['user_id']);
+        $exist = Account::findBotByTwitterId($result['user_id']);
         if($exist){
             abort(Response::HTTP_BAD_REQUEST, '既に連携されたアカウントです');
         }

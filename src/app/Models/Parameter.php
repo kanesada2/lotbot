@@ -14,7 +14,7 @@ class Parameter extends Model
     const KEY_CALL_BACK_URL = 'call_back_url';
     const KEY_RETWEET_RATE = 'retweet_rate';
     const KEY_LIKE_RAKE = 'like_rate';
-    const KEY_EXPLORE_FROM = 'explore_from';
+    const KEY_DURATION_MINUTES = 'duration_minutes';
 
     /**
      * keyによって一件取得する

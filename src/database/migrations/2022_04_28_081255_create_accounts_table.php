@@ -16,10 +16,11 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->enum('type', ['bot', 'target'])->index()->comment('アカウントの種別');
-            $table->string('twitter_id')->unique()->comment('twitterのアカウントID');
+            $table->string('twitter_id')->comment('twitterのアカウントID');
             $table->string('screen_name')->comment('twitterの表示名');
             $table->string('access_token')->nullable()->comment('twitterのアクセストークン');
             $table->string('access_secret')->nullable()->comment('twitterのアクセストークンシークレット');
+            $table->unique(['type', 'twitter_id'], 'unique_accounts_type_twitter_id');
             $table->timestamps();
         });
     }
