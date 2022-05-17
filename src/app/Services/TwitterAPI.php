@@ -17,6 +17,11 @@ class TwitterAPI {
         $this->consumerSecret = Parameter::consumerSecret();
     }
 
+    public function authenticate(Account $account)
+    {
+        $this->initConnection($account->access_token, $account->access_secret);
+    }
+
     public function initConnection(?string $accessToken = null, ?string $accessSecret = null)
     {
         $this->connection = new TwitterOAuth($this->consumerKey, $this->consumerSecret, $accessToken, $accessSecret);
