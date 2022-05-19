@@ -56,6 +56,21 @@ class Parameter extends Model
     public static function consumerSecret(): string
     {
         return static::extractValueByKey(static::KEY_CONSUMER_SECRET);
-    } 
+    }
+
+    public static function retweetRate(): string
+    {
+        return static::extractValueByKey(static::KEY_RETWEET_RATE);
+    }
+
+    public static function likeRate(): string
+    {
+        return static::extractValueByKey(static::KEY_LIKE_RAKE);
+    }
+
+    public static function durationMinutes(): string
+    {
+        return static::extractValueByKey(static::KEY_DURATION_MINUTES);
+    }
 
 }
