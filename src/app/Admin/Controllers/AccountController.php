@@ -3,10 +3,13 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Account;
+use App\Services\TwitterAPI;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Filter;
 use Encore\Admin\Show;
+use Illuminate\Support\MessageBag;
 
 class AccountController extends AdminController
 {
@@ -26,14 +29,16 @@ class AccountController extends AdminController
     {
         $grid = new Grid(new Account());
 
-        $grid->column('id', __('Id'));
-        $grid->column('type', __('Type'));
-        $grid->column('twitter_id', __('Twitter id'));
-        $grid->column('screen_name', __('Screen name'));
-        $grid->column('access_token', __('Access token'));
-        $grid->column('access_secret', __('Access secret'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('screen_name', 'アカウント名（@）');
+        $grid->actions(function ($actions) {
+            $actions->disableEdit();
+            $actions->disableView();
+        });
+
+        $grid->filter(function(Filter $filter){
+            $filter->disableIdFilter();
+            $filter->equal('type', 'アカウント種別')->select(['bot' => 'BOTアカウント', 'target' => '抽選対象アカウント']);
+        });
 
         return $grid;
     }
@@ -48,14 +53,9 @@ class AccountController extends AdminController
     {
         $show = new Show(Account::findOrFail($id));
 
-        $show->field('id', __('Id'));
-        $show->field('type', __('Type'));
-        $show->field('twitter_id', __('Twitter id'));
-        $show->field('screen_name', __('Screen name'));
-        $show->field('access_token', __('Access token'));
-        $show->field('access_secret', __('Access secret'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
+        $show->field('type', 'アカウント種別');
+        $show->field('screen_name', 'アカウント名（@）');
+        $show->field('twitter_id', 'twitterのid');
 
         return $show;
     }
@@ -69,12 +69,31 @@ class AccountController extends AdminController
     {
         $form = new Form(new Account());
 
-        $form->text('type', __('Type'));
-        $form->text('twitter_id', __('Twitter id'));
-        $form->text('screen_name', __('Screen name'));
-        $form->text('access_token', __('Access token'));
-        $form->text('access_secret', __('Access secret'));
+        $form->hidden('type', 'アカウント種別');
+        $form->text('screen_name', 'アカウント名（@）')->required();
+        $form->hidden('twitter_id', 'twitterのid');
 
+        $form->saving(function(Form $form){
+            if(!$form->input('type')){
+                $form->input('type', Account::ACCOUNT_TYPE_TARGET);
+            }
+            if(!$form->input('twitter_id')){
+                /** @var Account $first */
+                $first = Account::listBots()->first();
+                $twitter = new TwitterAPI();
+                $twitter->authenticate($first);
+                $id = $twitter->screenName2Id($form->input('screen_name'));
+                if(!$id){
+                    $error = new MessageBag([
+                        'title'   => 'エラー',
+                        'message' => 'そのユーザー名のアカウントは存在しません',
+                    ]);
+                
+                    return back()->with(compact('error'));
+                }
+                $form->input('twitter_id', $id);
+            }
+        });
         return $form;
     }
 }
