@@ -3,9 +3,12 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Log;
+use Encore\Admin\Actions\Action;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Displayers\Actions;
+use Encore\Admin\Grid\Filter;
 use Encore\Admin\Show;
 
 class LogController extends AdminController
@@ -15,7 +18,7 @@ class LogController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Log';
+    protected $title = 'エラーログ';
 
     /**
      * Make a grid builder.
@@ -26,13 +29,18 @@ class LogController extends AdminController
     {
         $grid = new Grid(new Log());
 
-        $grid->column('id', __('Id'));
-        $grid->column('bot_id', __('Bot id'));
-        $grid->column('target_id', __('Target id'));
-        $grid->column('code', __('Code'));
-        $grid->column('message', __('Message'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('bot.screen_name', 'BOTのアカウント名');
+        $grid->column('target.screen_name', '対象アカウントのアカウント名');
+        $grid->column('code', 'エラーコード');
+        $grid->column('message', 'エラーメッセージ');
+
+        $grid->actions(function (Actions $actions) {
+            $actions->disableAll();
+        });
+
+        $grid->filter(function(Filter $filter){
+            $filter->disableIdFilter();
+        });
 
         return $grid;
     }

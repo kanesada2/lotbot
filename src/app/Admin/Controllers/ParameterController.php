@@ -6,16 +6,26 @@ use App\Models\Parameter;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Filter;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
 class ParameterController extends AdminController
 {
+
+    public function index(Content $content)
+    {
+        $content = parent::index($content);
+        return $content
+            ->withInfo('コールバックURL', url('/auth/callback'));
+    }
+
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Parameter';
+    protected $title = '設定値';
 
     /**
      * Make a grid builder.
@@ -26,12 +36,19 @@ class ParameterController extends AdminController
     {
         $grid = new Grid(new Parameter());
 
-        $grid->column('id', __('Id'));
-        $grid->column('summary', __('Summary'));
-        $grid->column('key', __('Key'));
-        $grid->column('value', __('Value'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+
+        $grid->column('summary', '説明');
+        $grid->column('key', 'キー');
+        $grid->column('value', '値');
+
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableView();
+        });
+
+        $grid->filter(function(Filter $filter){
+            $filter->disableIdFilter();
+        });
 
         return $grid;
     }
@@ -65,9 +82,8 @@ class ParameterController extends AdminController
     {
         $form = new Form(new Parameter());
 
-        $form->text('summary', __('Summary'));
-        $form->text('key', __('Key'));
-        $form->text('value', __('Value'));
+        $form->text('summary', '説明')->readonly();
+        $form->text('value', '値');
 
         return $form;
     }

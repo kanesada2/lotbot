@@ -34,7 +34,6 @@ class LotTweetsCommand extends Command
      */
     public function handle()
     {
-        dd(Str::random());
         $twitter = new TwitterAPI();
         $durationMinutes = Parameter::durationMinutes();
         $executeTime = Carbon::now()->

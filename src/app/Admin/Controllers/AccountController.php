@@ -18,7 +18,7 @@ class AccountController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Account';
+    protected $title = 'アカウント';
 
     /**
      * Make a grid builder.
