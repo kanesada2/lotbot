@@ -36,9 +36,8 @@ class LotTweetsCommand extends Command
     {
         $twitter = new TwitterAPI();
         $durationMinutes = Parameter::durationMinutes();
-        $executeTime = Carbon::now()->
-            subMinutes($durationMinutes)
-            ->toIso8601String();
+        $executeTime = Carbon::now()->subMinutes($durationMinutes)->toIso8601String();
+        dd($executeTime);
 
         $bots = Account::listBots();
         $botScreenNames = implode(", ", $bots->pluck('screen_name')->toArray()); 
@@ -66,8 +65,8 @@ class LotTweetsCommand extends Command
             }
         }
         echo "対象のツイート: " . count($tweetIds) . "件\n";
-        $retweetRate = 50.01;//Parameter::retweetRate();
-        $likeRate = 50.05;//Parameter::likeRate();
+        $retweetRate = Parameter::retweetRate();
+        $likeRate = Parameter::likeRate();
         echo "リツイート確率: $retweetRate%\n";
         echo "いいね確率: $likeRate%\n";
 

@@ -17,4 +17,8 @@ RUN cd /usr/bin && curl -s http://getcomposer.org/installer | php && ln -s /usr/
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
+ENV TZ Asia/Tokyo
+RUN echo "${TZ}" > /etc/timezone \
+  && dpkg-reconfigure -f noninteractive tzdata
+
 WORKDIR /var/www/html/src
