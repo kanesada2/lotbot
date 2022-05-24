@@ -1,8 +1,5 @@
 <?php
 
-use App\Admin\Controllers\AccountController;
-use App\Admin\Controllers\LogController;
-use App\Admin\Controllers\ParameterController;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +15,7 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
 
-    $router->resource('accounts', AccountController::class);
+    $router->resource('accounts', 'AccountController');
     $router->resource('parameters', ParameterController::class);
     $router->resource('logs', LogController::class);
 });

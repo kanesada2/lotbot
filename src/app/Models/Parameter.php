@@ -22,7 +22,7 @@ class Parameter extends Model
      * @param string $key
      * @return static
      */
-    protected static function findByKey(string $key): static
+    protected static function findByKey(string $key): self
     {
         return static::where('key', $key)->first();
     }

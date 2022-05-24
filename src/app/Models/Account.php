@@ -14,7 +14,7 @@ class Account extends Model
 
     protected $guarded = ['id'];
 
-    public static function findBotByTwitterId(string $twitterId): ?static
+    public static function findBotByTwitterId(string $twitterId): ?self
     {
         return static::where('twitter_id', $twitterId)->where('type', static::ACCOUNT_TYPE_BOT)->first();
     }
